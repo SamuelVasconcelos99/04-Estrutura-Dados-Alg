@@ -52,13 +52,53 @@ public class ListaDupla<T> {
             }
         }
     }
-    public void removeMeio(){
-        if(primeiroNo == null){
-            System.out.println("Lista vazia");
+
+    public void addMeio (T dado, int posicao){
+        if(posicao <= 0){
+            addInicio(dado);
+            return;
+        }else if (posicao >= tamanho){
+            addFinal(dado);
+            return;
         }else{
-            // System.out.println("Dado: " +);
+            NoDuplo<T> novoNo = new NoDuplo<T>(dado, posicao);
+            NoDuplo<T> atual = primeiroNo;
+            int indice = 0;
+            while (atual != null && indice < posicao){
+                atual = atual.getProximoNo();
+                indice++;
+            }
+            NoDuplo<T> anterior = atual.getAnteriorNo();
+            novoNo.setProximoNo(atual);
+            novoNo.setAnteriorNo(anterior);    
+            if (anterior != null){
+                anterior.setProximoNo(novoNo);
+            }
+            else{
+                primeiroNo = novoNo;
+            }
+            atualizaIndice();
+            tamanho++;
         }
     }
+
+    public void removeMeio(int posicao){
+        NoDuplo<T> atual = primeiroNo;
+        int indice = 0;
+        if (posicao <= 0){
+            removeInicio();
+            return;
+        }else if (posicao >= tamanho - 1){
+            removeFinal();
+            return;
+        }
+        while(atual != null && indice < posicao){
+            atual = atual.getProximoNo();
+            indice++;
+        }
+    }
+
+    
     public void removeFinal(){
         if (primeiroNo == null){
             System.out.println("Lista vazia");
@@ -76,7 +116,7 @@ public class ListaDupla<T> {
     private void atualizaIndice(){
         NoDuplo<T> atual = primeiroNo;
         int indice = 0;
-        while (atual != null){
+        while(atual != null){
             atual.setIndice(indice);
             atual = atual.getProximoNo();
             indice++;
